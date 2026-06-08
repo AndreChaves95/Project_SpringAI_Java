@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ChatModelService {
 
-    private final ChatModel chatModel;
+    private final ChatModel chatModel; //Using OpenAi implementation of ChatModel interface.
+                                       //This abstracts the implementation of HTTP requests, headers, etc...
 
     public String generateText(String prompt) {
         return chatModel.call(prompt);

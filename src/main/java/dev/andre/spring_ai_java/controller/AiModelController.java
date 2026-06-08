@@ -14,7 +14,7 @@ public class AiModelController {
 
     private final ChatModelService chatModelService;
 
-    @GetMapping("/model/generateText")
+    @GetMapping("/generateText")
     public String generateAiText(@RequestParam String prompt) {
         return chatModelService.generateText(prompt);
     }
