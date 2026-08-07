@@ -4,9 +4,11 @@ import dev.andre.spring_ai_java.service.AudioSpeechModelService;
 import dev.andre.spring_ai_java.service.ChatModelService;
 import dev.andre.spring_ai_java.service.ImageModelService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController             // Class handles the request and returns data directly
 @RequestMapping("/api")
@@ -39,5 +41,17 @@ public class AiModelController {
         return ResponseEntity.ok()
                 .contentType(MediaType.valueOf("audio/mpeg"))
                 .body(audioSpeechModelService.convertTextToSpeech(text));
+    }
+
+    // For this request to work, the file provided must have one of the following formats:
+    // 'flac', 'm4a', 'mp3', 'mp4', 'mpeg', 'mpga', 'oga', 'ogg', 'wav', 'webm'
+    @PostMapping(value = "/generateTextFromAudio")
+    public ResponseEntity<String> generateTextFromAudio(@RequestParam("file") MultipartFile audioFile) {
+        if (!audioFile.isEmpty()) {
+            Resource audioResource = audioFile.getResource();
+            return ResponseEntity.ok(audioSpeechModelService.transcribeTextFromAudio(audioResource));
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
