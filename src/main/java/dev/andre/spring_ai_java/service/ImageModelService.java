@@ -16,6 +16,7 @@ import java.util.Objects;
 @Slf4j
 public class ImageModelService {
 
+    // Using OpenAi interface ImageModel
     private final ImageModel opeanAiImageModel;
     private final ImageModel stabilityAiImageModel;
 
@@ -34,6 +35,8 @@ public class ImageModelService {
         ImageResponse imageResponse = opeanAiImageModel.call(new ImagePrompt(prompt,
                 OpenAiImageOptions.builder()
                         .quality("hd")
+                        .style("cinematic")
+                        .N(1)
                         .responseFormat("b64_json")
                         .build()));
 

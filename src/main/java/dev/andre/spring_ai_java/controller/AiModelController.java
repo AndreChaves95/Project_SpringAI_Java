@@ -1,5 +1,6 @@
 package dev.andre.spring_ai_java.controller;
 
+import dev.andre.spring_ai_java.service.AudioSpeechModelService;
 import dev.andre.spring_ai_java.service.ChatModelService;
 import dev.andre.spring_ai_java.service.ImageModelService;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 public class AiModelController {
 
     private final ChatModelService chatModelService;
-
     private final ImageModelService imageModelService;
+    private final AudioSpeechModelService audioSpeechModelService;
 
     @GetMapping("/generateText")
     public String generateAiText(@RequestParam String prompt) {
@@ -31,5 +32,12 @@ public class AiModelController {
     @PostMapping(value = "/generateAiImage", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<byte[]> generateStabilityAiImage(@RequestParam String prompt) {
         return ResponseEntity.ok(imageModelService.generateStabilityAiImage(prompt));
+    }
+
+    @PostMapping(value = "/generateAudio", produces = "audio/mpeg")
+    public ResponseEntity<byte[]> generateAudioWithAi(@RequestParam String text) {
+        return ResponseEntity.ok()
+                .contentType(MediaType.valueOf("audio/mpeg"))
+                .body(audioSpeechModelService.convertTextToSpeech(text));
     }
 }
